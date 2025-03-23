@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity, Image } from "react-native";
 import React from "react";
 import { Link } from "expo-router";
+import { icons } from "@/constants/icons";
 
 const MovieCart = ({
   id,
@@ -22,6 +23,16 @@ const MovieCart = ({
           resizeMode="cover"
         />
         <Text className="text-white text-sm font-bold mt-2">{title}</Text>
+        <View className="flex-row items-center justify-start gap-x-1"> 
+          <Image
+            source={icons.star}
+            className="size-4"
+          />
+          <Text className="text-white text-sm font-bold">{Math.round(vote_average*10)/10}</Text>
+        </View>
+        <View className="flex-row items-center justify-between">
+          <Text className="text-light-300 text-xs font-medium mt-1">{release_date?.split('-')[0]}</Text>
+        </View>
       </TouchableOpacity>
     </Link>
   );
