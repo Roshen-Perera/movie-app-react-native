@@ -10,6 +10,7 @@ import MovieCart from "@/components/movieCart";
 
 const index = () => {
   const router = useRouter(); // This is a hook from expo-router that allows you to navigate between screens
+  
   const { 
     data: movies, 
     loading: moviesLoading, 
