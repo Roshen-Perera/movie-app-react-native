@@ -1,5 +1,5 @@
 import { View, Text, Image, FlatList, ActivityIndicator } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { images } from "@/constants/images";
 import MovieCart from "@/components/movieCart";
 import { fetchMovies } from "@/services/api";
@@ -14,11 +14,25 @@ const Search = () => {
     data: movies,
     loading: moviesLoading,
     error: moviesError,
+    refetch: loadMovies,
+    reset
   } = useFetch(() =>
     fetchMovies({
       query: searchQuery,
     }), false
   );
+
+  useEffect(() => {
+    const timeOutId = setTimeout( async () => {
+      if (searchQuery.trim()) {
+        await loadMovies();
+      } else {
+        reset();
+      }
+    }, 500);
+    return () => clearTimeout(timeOutId);
+  }, [searchQuery]);
+
   return (
     <View className="flex-1 bg-primary">
       <Image
@@ -46,7 +60,11 @@ const Search = () => {
               <Image source={icons.logo} className="w-12 h-10" />
             </View>
             <View className="my-5">
-              <SearchBar placeholder="Search movies ..." value={searchQuery} onChangeText={(text: string) => setSearchQuery(text)}/>
+              <SearchBar
+                placeholder="Search movies ..."
+                value={searchQuery}
+                onChangeText={(text: string) => setSearchQuery(text)}
+              />
             </View>
             {moviesLoading && (
               <ActivityIndicator
@@ -70,6 +88,16 @@ const Search = () => {
                 </Text>
               )}
           </>
+        }
+        ListEmptyComponent={
+          !moviesLoading &&
+          !moviesError ? (
+            <View className="mt-10 px-5">
+              <Text className="text-center text-gray-500">
+                {searchQuery.trim() ? 'No movies found' : 'Search for a movie'}
+              </Text>
+            </View>
+          ) : null
         }
       />
     </View>
