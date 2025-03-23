@@ -1,5 +1,5 @@
 import { View, Text, Image, FlatList, ActivityIndicator } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { images } from "@/constants/images";
 import MovieCart from "@/components/movieCart";
 import { fetchMovies } from "@/services/api";
@@ -9,16 +9,15 @@ import { icons } from "@/constants/icons";
 import SearchBar from "@/components/SearchBar";
 
 const Search = () => {
-  const router = useRouter(); // This is a hook from expo-router that allows you to navigate between screens
-
+  const [searchQuery, setSearchQuery] = useState("");
   const {
     data: movies,
     loading: moviesLoading,
     error: moviesError,
   } = useFetch(() =>
     fetchMovies({
-      query: "",
-    })
+      query: searchQuery,
+    }), false
   );
   return (
     <View className="flex-1 bg-primary">
@@ -47,7 +46,7 @@ const Search = () => {
               <Image source={icons.logo} className="w-12 h-10" />
             </View>
             <View className="my-5">
-              <SearchBar placeholder="Search movies ..." />
+              <SearchBar placeholder="Search movies ..." value={searchQuery} onChangeText={(text: String) => setSearchQuery(text)}/>
             </View>
             {moviesLoading && (
               <ActivityIndicator
@@ -63,11 +62,11 @@ const Search = () => {
             )}
             {!moviesLoading &&
               !moviesError &&
-              "SEARCH TERM".trim() &&
+              searchQuery.trim() &&
               movies?.length > 0 && (
                 <Text className="text-xl text-white font-bold">
                   Search Results for{" "}
-                  <Text className="text-accent">SEARCH TERM</Text>
+                  <Text className="text-accent">{searchQuery}</Text>
                 </Text>
               )}
           </>
