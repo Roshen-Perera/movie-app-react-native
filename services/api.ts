@@ -1,4 +1,3 @@
-    const key = "b2b6887b5e9874f5184ed8426662be52"
 
     export const TMDB_CONFIG = {
         BASE_URL: 'https://api.themoviedb.org/3',
