@@ -6,6 +6,7 @@ import SearchBar from "@/components/SearchBar";
 import { useRouter } from "expo-router";
 import useFetch from "@/services/useFetch";
 import { fetchMovies } from "@/services/api";
+import MovieCart from "@/components/movieCart";
 
 const index = () => {
   const router = useRouter(); // This is a hook from expo-router that allows you to navigate between screens
@@ -44,7 +45,7 @@ const index = () => {
               <FlatList
                 data={movies}
                 renderItem={({ item }) => (
-                  <Text className="text-white text-sm">{item.title}</Text>
+                  <MovieCart {...item}/>
                 )} 
                 keyExtractor={(item) => item.id.toString()}
                 numColumns={3}
